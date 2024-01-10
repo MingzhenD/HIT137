@@ -47,4 +47,16 @@ def process_csv_file(self, doc_path, txt_col_name):
     entities_biober=[self.extract_entities_biobert(txt)for txt in txt_col]
     return entities_sci_sm,entities_bc5cdr_md,entities_biobert
 
-def compare_data
+def compare_data(self,entities_sci_sm,entities_bc5cdr_md,entities_biobert):
+    common_entities=set(entities_sci_sm)& set(entities_bc5cdr_md)& set(entities_biobert)
+    total_entities_sci_sm=sum(len(entities)for entities in entities_sci_sm
+    total_entities_bc5cdr_md=sum(len(entities)for entities in entities_bc5cdr_md)
+    total_entities_biobert=sum(len(entities)for entities in entities_biobert)
+
+    print("\nResults:")
+    print("Total entities detected by en_core_sci_sm",total_entities_sci_sm)
+    print("Total entities detected by en_ner_bc5cdr_md:",total_entities_bc5cdr_md)
+    print("Total entities detected by biobert:",total_entities_biobert)
+    print("Common entities:",common_entities)
+
+ner_processor=NERProcessor(spacy_model='en_core_sci_sm', bio_model='en_ner_bc5cdr_md')
