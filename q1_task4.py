@@ -60,3 +60,8 @@ def compare_data(self,entities_sci_sm,entities_bc5cdr_md,entities_biobert):
     print("Common entities:",common_entities)
 
 ner_processor=NERProcessor(spacy_model='en_core_sci_sm', bio_model='en_ner_bc5cdr_md')
+
+for file_number in range(1, 5):
+    file_path = f'your_csv_file_{file_number}.csv'
+    entities_sci_sm, entities_bc5cdr_md, entities_biobert = ner_processor.process_csv_file(file_path, text_column_name='text_column_name')
+    ner_processor.compare_results(entities_sci_sm, entities_bc5cdr_md, entities_biobert)
