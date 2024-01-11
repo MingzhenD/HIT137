@@ -1,33 +1,40 @@
-import os, sys
+import os
 import pandas as pd
+import zipfile
+import io
 
-PATH = os.path.dirname(__file__)
-COLUMNS = ["SHORT-TEXT", "TEXT"]
-ASSIGNMENT_FOLDER = "Assignment 2"
-TEXTFILE = "ALLTEXT.txt"
+# Get the user's directory
+home_dir = os.path.expanduser("~")
 
+# Construct path to zipped folder in Downloads directory
+zip_folder = "Downloads"
+zip_file_name = "Assignment 2.zip"
+zip_path = os.path.join(home_dir, zip_folder, zip_file_name)
 
-def getCSVFiles(path=os.path.join(PATH, ASSIGNMENT_FOLDER), suffix=".csv"):
-    return [os.path.join(path, x) for x in os.listdir(path) if x.endswith(suffix)]
+every_txts = []
 
+# Open zip file and iterate through CSV files
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    for file_name in zip_ref.namelist():
+        if file_name.endswith(".csv"):
+            # Read the CSV file directly from the zip archive
+            with zip_ref.open(file_name) as file:
+                df = pd.read_csv(io.TextIOWrapper(file))
 
-def exportText(files, target=os.path.join(PATH, TEXTFILE)):
-    # clear file
-    open(target, "w").close()
+                # Extract the 'TEXT' or 'SHORT-TEXT' column and append to the list
+                if 'TEXT' in df.columns:
+                    every_txts.extend(df['TEXT'].astype(str))
+                elif 'SHORT-TEXT' in df.columns:
+                    every_txts.extend(df['SHORT-TEXT'].astype(str))
 
-    for file in files:
-        csv = pd.read_csv(file, usecols=lambda c: c in set(COLUMNS))
-        csv.to_csv(os.path.join(PATH, TEXTFILE), header=False, mode="a", index=False)
+# Put texts into one string
+consolidated_txt = '\n'.join(every_txts)
 
+# Path to text file
+outward_txt_file = os.path.join(home_dir, zip_folder, "Combined_Text.txt")
 
-def main():
-    files = getCSVFiles()
-    if not files:
-        sys.exit(
-            "No CSV files found. please put this .py file in the parent folder of Assignment 2"
-        )
+# Publish the txt file
+with open(outward_txt_file, 'w', encoding='utf-8') as txt_file:
+    txt_file.write(consolidated_txt)
 
-    exportText(files)
-
-
-main()
+print("Texts exported and pasted to:", outward_txt_file)
