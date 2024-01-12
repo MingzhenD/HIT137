@@ -26,14 +26,14 @@ def get_diseases_and_chemicals(file_path, batch_size=10000):
     chemical_scispacy = set()
 
     # Process the file in batches
+    print('Reading file...')
     with open(file_path, 'r', encoding='utf-8') as file:
         while True:
             batch = file.read(batch_size)
             if not batch:
                 break  # End of file
 
-            # Tokenize the batch
-            print('Reading biobert batch...')
+            # Tokenize the batch            
             disease_tokens = biobert_tokenizer_disease(batch)     
             disease_tokens_biobert = [entity['word'] for entity in disease_tokens if 'DISEASE' in entity['entity'].upper()]
             diseases_biobert.update(set(disease_tokens_biobert))
@@ -41,10 +41,8 @@ def get_diseases_and_chemicals(file_path, batch_size=10000):
             chemical_tokens = biobert_tokenizer_chemical(batch)   
             chemical_tokens_biobert = [entity['word'] for entity in chemical_tokens if 'CHEMICAL' in entity['entity'].upper()]
             chemical_biobert.update(set(chemical_tokens_biobert))
-
-            print('Reading scispacy batch...')
+            
             doc_bc5cdr = nlp_bc5cdr(batch)
-
             diseases = [ent.text for ent in doc_bc5cdr.ents if ent.label_ == 'DISEASE']
             diseases_scispacy.update(set(diseases))
 
