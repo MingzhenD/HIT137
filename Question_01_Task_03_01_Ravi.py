@@ -32,8 +32,8 @@ def read_large_file(file_path, batch_size=10000):
 def process_large_file(file_path):
     all_word_counts = Counter()
 
-    for batch in read_large_file(file_path):
-        print('Reading batch...')
+    print('Reading file...')
+    for batch in read_large_file(file_path):        
         word_counts = count_words(batch)
         all_word_counts += word_counts
 
