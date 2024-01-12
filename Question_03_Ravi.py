@@ -132,7 +132,7 @@ def modify_dict():
     local_variable = 10  
     my_dict['ke14'] = local_variable  
     
-modify_dict()  #removed parameter, the method does not expect any parameter
+modify_dict()  #passed parameter removed, the method does not expect any parameter
 
 def update_global():   
     global global_variable   
