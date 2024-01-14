@@ -1,3 +1,5 @@
+# github link
+# https://github.com/MingzhenD/HIT137.git
 raw_str = input("input string:")
 # raw_str = "56aAww1984sktr235270aYmn145ss785fsq31D0"
 
